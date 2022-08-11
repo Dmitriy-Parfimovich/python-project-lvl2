@@ -30,7 +30,8 @@ def generate_diff(file_path1, file_path2):
     ordered_result_right = OrderedDict()
     for key in ordered_result:
         key_list = list(key)
-        if key_list[-4::] != ['-', 'X', '_', '*'] and key_list[-4::] != ['-', 'Y', '_', '*']:
+        if key_list[-4::] != ['-', 'X', '_', '*'] and\
+           key_list[-4::] != ['-', 'Y', '_', '*']:
             ordered_result_right['  ' + key] = ordered_result[key]
         if key_list[-4::] == ['-', 'X', '_', '*']:
             key_list = key_list[0:-4]
@@ -44,4 +45,3 @@ def generate_diff(file_path1, file_path2):
     for key, value in ordered_result_right.items():
         print(f'  {key}: {str(value).lower()}')
     print('}')
-
