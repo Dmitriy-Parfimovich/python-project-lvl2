@@ -2,6 +2,27 @@ import json
 from collections import OrderedDict
 
 
+def get_correct_output(ordered_result):
+    ordered_result_right = OrderedDict()
+    for key in ordered_result:
+        key_list = list(key)
+        if key_list[-4::] != ['-', 'X', '_', '*'] and\
+           key_list[-4::] != ['-', 'Y', '_', '*']:
+            ordered_result_right['  ' + key] = ordered_result[key]
+        if key_list[-4::] == ['-', 'X', '_', '*']:
+            key_list = key_list[0:-4]
+            new_key = ['- ' + ''.join(key_list)]
+            ordered_result_right[new_key[0]] = ordered_result[key]
+        if key_list[-4::] == ['-', 'Y', '_', '*']:
+            key_list = key_list[0:-4]
+            new_key = ['+ ' + ''.join(key_list)]
+            ordered_result_right[new_key[0]] = ordered_result[key]
+    print('{')
+    for key, value in ordered_result_right.items():
+        print(f'  {key}: {str(value).lower()}')
+    print('}')
+
+
 def generate_diff(file_path1, file_path2):
     with open(file_path1, 'r', encoding='utf-8') as f1:
         text1 = json.load(f1)
@@ -27,21 +48,4 @@ def generate_diff(file_path1, file_path2):
     result = dict(zip(key_list, value_list)).items()
     result = dict(sorted(result))
     ordered_result = OrderedDict(result.items())
-    ordered_result_right = OrderedDict()
-    for key in ordered_result:
-        key_list = list(key)
-        if key_list[-4::] != ['-', 'X', '_', '*'] and\
-           key_list[-4::] != ['-', 'Y', '_', '*']:
-            ordered_result_right['  ' + key] = ordered_result[key]
-        if key_list[-4::] == ['-', 'X', '_', '*']:
-            key_list = key_list[0:-4]
-            new_key = ['- ' + ''.join(key_list)]
-            ordered_result_right[new_key[0]] = ordered_result[key]
-        if key_list[-4::] == ['-', 'Y', '_', '*']:
-            key_list = key_list[0:-4]
-            new_key = ['+ ' + ''.join(key_list)]
-            ordered_result_right[new_key[0]] = ordered_result[key]
-    print('{')
-    for key, value in ordered_result_right.items():
-        print(f'  {key}: {str(value).lower()}')
-    print('}')
+    get_correct_output(ordered_result)
