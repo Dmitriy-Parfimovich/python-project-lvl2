@@ -25,11 +25,11 @@ jobs:
           make lint
       - name: Test with pytest
         run: |
-          make 
+          make pytest
       - name: Test & publish code coverage
         uses: paambaati/codeclimate-action@v2.7.4
         env:
-          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+          CC_TEST_REPORTER_ID: 67a33e38dc95ea7bdc2192f66aa19cb4aab5e6e8ec152ac7f27181acde397a7b
         with:
           coverageCommand: make test-coverage
           debug: true
