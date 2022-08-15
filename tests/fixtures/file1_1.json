@@ -1,0 +1,8 @@
+{
+  "firstName": "Jane",
+  "lastName": "Doe",
+  "city": "Houston",
+  "hobbies": ["running", "sky diving", "singing"],
+  "age": 35,
+  "children": "Alice, age 8"
+  }

@@ -27,6 +27,7 @@ def get_diff_dict(text1, text2):
 
 
 def get_correct_output(ordered_result):
+    total_output = ''
     ordered_result_right = OrderedDict()
     for key in ordered_result:
         key_list = list(key)
@@ -41,10 +42,10 @@ def get_correct_output(ordered_result):
             key_list = key_list[0:-4]
             new_key = ['+ ' + ''.join(key_list)]
             ordered_result_right[new_key[0]] = ordered_result[key]
-    print('{')
     for key, value in ordered_result_right.items():
-        print(f'  {key}: {str(value).lower()}')
-    print('}')
+        one_output_line = str(f'  {key}: {str(value).lower()}')
+        total_output += '\n' + one_output_line
+    return '{' + f'{total_output}' + '\n}'
 
 
 def generate_diff(file_path1, file_path2):
@@ -53,4 +54,4 @@ def generate_diff(file_path1, file_path2):
     with open(file_path2, 'r', encoding='utf-8') as f2:
         text2 = json.load(f2)
     ordered_result = get_diff_dict(text1, text2)
-    get_correct_output(ordered_result)
+    return get_correct_output(ordered_result)

@@ -1,0 +1,13 @@
+{
+  - age: 35
+  + age: 42
+  - children: alice, age 8
+  + children: bob, age 11
+    city: houston
+  - firstName: jane
+  + firstName: richard
+  - hobbies: ['running', 'sky diving', 'singing']
+  + hobbies: playing football
+  - lastName: doe
+  + lastName: potato
+}
