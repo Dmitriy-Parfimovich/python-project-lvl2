@@ -1,0 +1,14 @@
+{
+    Address: 
+  - City: san francisco
+  + City: sunnyvale
+    Country: us
+  - Latitude: 37.7668
+  + Latitude: 37.371991
+  - Longitude: -122.3959
+  + Longitude: -122.02602
+    State: ca
+  - Zip: 94107
+  + Zip: 94085
+    precision: zip
+}

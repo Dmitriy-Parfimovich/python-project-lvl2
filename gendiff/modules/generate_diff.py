@@ -1,4 +1,5 @@
 import json
+import yaml
 from collections import OrderedDict
 
 # flake8: noqa
@@ -48,10 +49,20 @@ def get_correct_output(ordered_result):
     return '{' + f'{total_output}' + '\n}'
 
 
+def check_extension(file_path):
+    extension = file_path.split('.')[-1]
+    if extension == 'json':
+        with open(file_path, 'r', encoding='utf-8') as f:
+            text = json.load(f)
+            return text
+    if extension == 'yaml' or extension == 'yml':
+        with open(file_path, encoding='utf-8') as f:
+            text = yaml.load(f, Loader=yaml.FullLoader)
+            return text
+
+
 def generate_diff(file_path1, file_path2):
-    with open(file_path1, 'r', encoding='utf-8') as f1:
-        text1 = json.load(f1)
-    with open(file_path2, 'r', encoding='utf-8') as f2:
-        text2 = json.load(f2)
+    text1 = check_extension(file_path1)
+    text2 = check_extension(file_path2)
     ordered_result = get_diff_dict(text1, text2)
     return get_correct_output(ordered_result)
