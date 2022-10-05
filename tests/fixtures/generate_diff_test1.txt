@@ -1,13 +1,13 @@
 {
   - age: 35
   + age: 42
-  - children: alice, age 8
-  + children: bob, age 11
-    city: houston
-  - firstName: jane
-  + firstName: richard
+  - children: Alice, age 8
+  + children: Bob, age 11
+    city: Houston
+  - firstName: Jane
+  + firstName: Richard
   - hobbies: ['running', 'sky diving', 'singing']
   + hobbies: playing football
-  - lastName: doe
-  + lastName: potato
+  - lastName: Doe
+  + lastName: Potato
 }

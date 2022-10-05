@@ -1,6 +1,8 @@
 import json
 import yaml
+from gendiff.modules.stylish import stylish
 from collections import OrderedDict
+
 
 # flake8: noqa
 def get_diff_dict(text1, text2):
@@ -61,8 +63,11 @@ def check_extension(file_path):
             return text
 
 
-def generate_diff(file_path1, file_path2):
+def generate_diff(file_path1, file_path2, format='stylish'):
     text1 = check_extension(file_path1)
     text2 = check_extension(file_path2)
-    ordered_result = get_diff_dict(text1, text2)
-    return get_correct_output(ordered_result)
+    if format == 'stylish':
+        return stylish(text1, text2)
+    else:
+        ordered_result = get_diff_dict(text1, text2)
+        return get_correct_output(ordered_result)

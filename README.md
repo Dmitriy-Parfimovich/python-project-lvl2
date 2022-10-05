@@ -10,3 +10,6 @@
 
 ## _The generate_diff module work (yaml):_
 [![asciicast](https://asciinema.org/a/BdYmPM61c4Q7L26pPeQmIHgpd.svg)](https://asciinema.org/a/BdYmPM61c4Q7L26pPeQmIHgpd)
+
+## _The stylish module work:_
+[![asciicast](https://asciinema.org/a/T1O2FXWIOKY2ahrelkZ0jREvk.svg)](https://asciinema.org/a/T1O2FXWIOKY2ahrelkZ0jREvk)
