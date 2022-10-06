@@ -108,10 +108,8 @@ def stringify(value, replacer=' ', spaces_count=1): # noqa
         for item in current_value:
             if type(item) is dict:
                 for key, val in item.items():
-                    if (type(val) is list and type((val)[0]) is
-                            dict) or type(val) is dict:
-                        lines.append(f'{deep_indent}{key}:\
-                                     {iter_(val, deep_indent_size+2)}')
+                    if (type(val) is list and type((val)[0]) is dict) or type(val) is dict: # noqa
+                        lines.append(f'{deep_indent}{key}: {iter_(val, deep_indent_size+2)}') # noqa
                     else:
                         lines.append(f'{deep_indent}{key}: {val}')
             else:
