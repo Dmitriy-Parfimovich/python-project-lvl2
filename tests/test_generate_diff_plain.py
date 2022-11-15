@@ -15,12 +15,12 @@ def input_filepaths2():
 
 
 @pytest.fixture()
-def output_generate_diff_test():
-    with open('tests/fixtures/generate_diff_test_recur.txt') as f:
+def output_generate_diff_test_plain():
+    with open('tests/fixtures/generate_diff_test_plain.txt') as f:
         output_result = f.read()
     return output_result
 
 
-def test_generate_diff(input_filepaths1, input_filepaths2, output_generate_diff_test):
-    result = generate_diff(input_filepaths1, input_filepaths2)
-    assert result == output_generate_diff_test
+def test_generate_diff_plain(input_filepaths1, input_filepaths2, output_generate_diff_test_plain):
+    result = generate_diff(input_filepaths1, input_filepaths2, 'plain')
+    assert result == output_generate_diff_test_plain

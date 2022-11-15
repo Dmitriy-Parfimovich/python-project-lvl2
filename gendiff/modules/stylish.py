@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import copy
 import itertools
 
@@ -122,6 +124,6 @@ def stringify(value, replacer=' ', spaces_count=1): # noqa
     return iter_(value, 0)
 
 
-# -------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
 def stylish(text1, text2):
     return stringify(get_decoded_dict(sort_dict(walk(text1, text2))), ' ', 2)
