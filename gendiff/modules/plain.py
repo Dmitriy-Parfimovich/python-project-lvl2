@@ -5,12 +5,13 @@ import itertools
 from gendiff.modules.stylish import walk, sort_dict
 
 
-def get_plain_list(tree):
+def get_plain_list(tree): # noqa
     tree = copy.deepcopy(tree)
+
     def walk(tree, node='', lines=[]):
         for item in tree:
             for item1 in item:
-                key, children = item1, item[item1]
+                children = item[item1]
                 if children == '=' and type(item['value']) is list:
                     node += '.' + item['key']
                     walk(item['value'], node)
@@ -43,7 +44,7 @@ def get_plain_list(tree):
     return walk(tree)
 
 
-def get_plain_format(lines):
+def get_plain_format(lines): # noqa
     res_lines = []
     for elem in lines:
         if elem == 'added':
@@ -57,9 +58,9 @@ def get_plain_format(lines):
                lines[1] == 'true' or\
                lines[1] == 'false' or\
                lines[1] == 'null':
-                res_lines.append(f"Property '{lines[0][1:]}' was added with value: {lines[1]}")
+                res_lines.append(f"Property '{lines[0][1:]}' was added with value: {lines[1]}") # noqa
             else:
-              res_lines.append(f"Property '{lines[0][1:]}' was added with value: '{lines[1]}'")
+                res_lines.append(f"Property '{lines[0][1:]}' was added with value: '{lines[1]}'") # noqa
             lines = lines[3:]
         if elem == 'removed':
             res_lines.append(f"Property '{lines[0][1:]}' was removed")
@@ -77,18 +78,20 @@ def get_plain_format(lines):
                 lines[2] = 'false'
             if lines[2] is None:
                 lines[2] = 'null'
-            if (lines[1] == 'true' or lines[1] == 'false' or lines[1] == 'null' or\
-               lines[1] == '[complex value]') and (lines[2] == 'true' or\
-               lines[2] == 'false' or lines[2] == 'null' or lines[2] == '[complex value]'):
-                res_lines.append(f"Property '{lines[0][1:]}' was updated. From {lines[1]} to {lines[2]}")
-            elif (lines[1] == 'true' or lines[1] == 'false' or lines[1] == 'null' or\
-               lines[1] == '[complex value]'):
-                res_lines.append(f"Property '{lines[0][1:]}' was updated. From {lines[1]} to '{lines[2]}'")
-            elif (lines[2] == 'true' or lines[2] == 'false' or lines[2] == 'null' or\
-               lines[2] == '[complex value]'):
-                res_lines.append(f"Property '{lines[0][1:]}' was updated. From '{lines[1]}' to {lines[2]}")
+            if (lines[1] == 'true' or lines[1] == 'false' or lines[1] == 'null'
+                or lines[1] == '[complex value]')\
+                and (lines[2] == 'true' or lines[2] == 'false'
+                     or lines[2] == 'null' or lines[2] == '[complex value]'):
+                res_lines.append(f"Property '{lines[0][1:]}' was updated. From {lines[1]} to {lines[2]}") # noqa
+            elif (lines[1] == 'true' or lines[1] == 'false'
+                  or lines[1] == 'null'
+                  or lines[1] == '[complex value]'):
+                res_lines.append(f"Property '{lines[0][1:]}' was updated. From {lines[1]} to '{lines[2]}'") # noqa
+            elif (lines[2] == 'true' or lines[2] == 'false'
+                  or lines[2] == 'null' or lines[2] == '[complex value]'):
+                res_lines.append(f"Property '{lines[0][1:]}' was updated. From '{lines[1]}' to {lines[2]}") # noqa
             else:
-                res_lines.append(f"Property '{lines[0][1:]}' was updated. From '{lines[1]}' to '{lines[2]}'")
+                res_lines.append(f"Property '{lines[0][1:]}' was updated. From '{lines[1]}' to '{lines[2]}'") # noqa
             lines = lines[4:]
     result = itertools.chain(res_lines)
     return '\n'.join(result)
