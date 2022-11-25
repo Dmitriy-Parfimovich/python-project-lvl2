@@ -13,3 +13,6 @@
 
 ## _The stylish module work:_
 [![asciicast](https://asciinema.org/a/T1O2FXWIOKY2ahrelkZ0jREvk.svg)](https://asciinema.org/a/T1O2FXWIOKY2ahrelkZ0jREvk)
+
+## _The plain module work:_
+[![asciicast](https://asciinema.org/a/70n5Jtkk6LeMdFOrAkOxvs1La.svg)](https://asciinema.org/a/70n5Jtkk6LeMdFOrAkOxvs1La)
