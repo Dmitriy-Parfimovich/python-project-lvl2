@@ -45,7 +45,6 @@ def get_plain_list(tree): # noqa
 
 
 def get_plain_format(lines): # noqa
-    print(lines)
     res_lines = []
     for elem in lines:
         if elem == 'added':
