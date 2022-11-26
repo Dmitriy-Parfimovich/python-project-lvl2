@@ -20,6 +20,8 @@ def main():
         print(generate_diff(args.first_file, args.second_file))
     if args.format == 'plain':
         print(generate_diff(args.first_file, args.second_file, 'plain'))
+    if args.format == 'json':
+        print(generate_diff(args.first_file, args.second_file, 'json'))
 
 
 if __name__ == '__main__':

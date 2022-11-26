@@ -4,6 +4,7 @@ import json
 import yaml
 from gendiff.modules.stylish import stylish
 from gendiff.modules.plain import plain
+from gendiff.modules.json_output import get_json
 from collections import OrderedDict
 
 
@@ -73,6 +74,8 @@ def generate_diff(file_path1, file_path2, format='stylish'):
         return stylish(text1, text2)
     if format == 'plain':
         return plain(text1, text2)
+    if format == 'json':
+        return get_json(text1, text2)
     else:
         ordered_result = get_diff_dict(text1, text2)
         return get_correct_output(ordered_result)

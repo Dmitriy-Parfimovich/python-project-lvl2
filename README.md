@@ -16,3 +16,6 @@
 
 ## _The plain module work:_
 [![asciicast](https://asciinema.org/a/70n5Jtkk6LeMdFOrAkOxvs1La.svg)](https://asciinema.org/a/70n5Jtkk6LeMdFOrAkOxvs1La)
+
+## _The json_output module work:_
+[![asciicast](https://asciinema.org/a/b8EX8o3ggcJMCuqOvDn1OV9O9.svg)](https://asciinema.org/a/b8EX8o3ggcJMCuqOvDn1OV9O9)
