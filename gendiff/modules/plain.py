@@ -45,6 +45,7 @@ def get_plain_list(tree): # noqa
 
 
 def get_plain_format(lines): # noqa
+    print(lines)
     res_lines = []
     for elem in lines:
         if elem == 'added':
@@ -57,7 +58,8 @@ def get_plain_format(lines): # noqa
             if lines[1] == '[complex value]' or\
                lines[1] == 'true' or\
                lines[1] == 'false' or\
-               lines[1] == 'null':
+               lines[1] == 'null' or\
+               type(lines[1]) is int:
                 res_lines.append(f"Property '{lines[0][1:]}' was added with value: {lines[1]}") # noqa
             else:
                 res_lines.append(f"Property '{lines[0][1:]}' was added with value: '{lines[1]}'") # noqa
@@ -79,16 +81,18 @@ def get_plain_format(lines): # noqa
             if lines[2] is None:
                 lines[2] = 'null'
             if (lines[1] == 'true' or lines[1] == 'false' or lines[1] == 'null'
-                or lines[1] == '[complex value]')\
+                or lines[1] == '[complex value]' or type(lines[1]) is int)\
                 and (lines[2] == 'true' or lines[2] == 'false'
-                     or lines[2] == 'null' or lines[2] == '[complex value]'):
+                     or lines[2] == 'null' or lines[2] == '[complex value]'\
+                     or type(lines[2]) is int):
                 res_lines.append(f"Property '{lines[0][1:]}' was updated. From {lines[1]} to {lines[2]}") # noqa
             elif (lines[1] == 'true' or lines[1] == 'false'
                   or lines[1] == 'null'
-                  or lines[1] == '[complex value]'):
+                  or lines[1] == '[complex value]' or type(lines[1]) is int):
                 res_lines.append(f"Property '{lines[0][1:]}' was updated. From {lines[1]} to '{lines[2]}'") # noqa
             elif (lines[2] == 'true' or lines[2] == 'false'
-                  or lines[2] == 'null' or lines[2] == '[complex value]'):
+                  or lines[2] == 'null' or lines[2] == '[complex value]'\
+                  or type(lines[2]) is int):
                 res_lines.append(f"Property '{lines[0][1:]}' was updated. From '{lines[1]}' to {lines[2]}") # noqa
             else:
                 res_lines.append(f"Property '{lines[0][1:]}' was updated. From '{lines[1]}' to '{lines[2]}'") # noqa
