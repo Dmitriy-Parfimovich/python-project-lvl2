@@ -8,6 +8,12 @@ from gendiff.modules.json_output import get_json
 from collections import OrderedDict
 
 
+# constants
+FORMAT_ONE = 'stylish'
+FORMAT_TWO = 'plain'
+FORMAT_THREE = 'json'
+
+
 # flake8: noqa
 def get_diff_dict(text1, text2):
     key_list, value_list, result = [], [], []
@@ -55,27 +61,32 @@ def get_correct_output(ordered_result):
     return '{' + f'{total_output}' + '\n}'
 
 
-def check_extension(file_path):
+def read_file(file_path):
     extension = file_path.split('.')[-1]
+    with open(file_path, 'r', encoding='utf-8') as f:
+        text = f.read()
+        return text, extension
+
+
+def get_dict_from_text(text, extension):
     if extension == 'json':
-        with open(file_path, 'r', encoding='utf-8') as f:
-            text = json.load(f)
-            return text
+        text_dict = json.loads(text)
     if extension == 'yaml' or extension == 'yml':
-        with open(file_path, encoding='utf-8') as f:
-            text = yaml.load(f, Loader=yaml.FullLoader)
-            return text
+        text_dict = yaml.load(text, Loader=yaml.FullLoader)
+    return text_dict
 
 
 def generate_diff(file_path1, file_path2, format='stylish'):
-    text1 = check_extension(file_path1)
-    text2 = check_extension(file_path2)
-    if format == 'stylish':
-        return stylish(text1, text2)
-    if format == 'plain':
-        return plain(text1, text2)
-    if format == 'json':
-        return get_json(text1, text2)
+    text1, extension1 = read_file(file_path1)
+    text2, extension2 = read_file(file_path2)
+    text_dict1 = get_dict_from_text(text1, extension1)
+    text_dict2 = get_dict_from_text(text2, extension2)
+    if format == FORMAT_ONE:
+        return stylish(text_dict1, text_dict2)
+    if format == FORMAT_TWO:
+        return plain(text_dict1, text_dict2)
+    if format == FORMAT_THREE:
+        return get_json(text_dict1, text_dict2)
     else:
-        ordered_result = get_diff_dict(text1, text2)
+        ordered_result = get_diff_dict(text_dict1, text_dict2)
         return get_correct_output(ordered_result)

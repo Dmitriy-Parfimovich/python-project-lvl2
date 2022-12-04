@@ -4,6 +4,7 @@ import argparse
 from gendiff import generate_diff
 
 
+# the MAIN parser (function)
 def main():
 
     parser = argparse.ArgumentParser(description='Compares two configuration\
@@ -16,12 +17,7 @@ def main():
 
     args = parser.parse_args()
 
-    if args.format == 'stylish':
-        print(generate_diff(args.first_file, args.second_file))
-    if args.format == 'plain':
-        print(generate_diff(args.first_file, args.second_file, 'plain'))
-    if args.format == 'json':
-        print(generate_diff(args.first_file, args.second_file, 'json'))
+    print(generate_diff(args.first_file, args.second_file, args.format))
 
 
 if __name__ == '__main__':
