@@ -2,7 +2,7 @@
 
 import copy
 import itertools
-from gendiff.modules.stylish import walk, sort_dict
+from gendiff.modules.stylish import sort_dict
 
 
 def get_plain_list(tree): # noqa
@@ -101,5 +101,5 @@ def get_plain_format(lines): # noqa
 
 
 # ---------------------------------------------------------------------------
-def plain(text1, text2):
-    return get_plain_format(get_plain_list(sort_dict(walk(text1, text2))))
+def plain(work_diff):
+    return get_plain_format(get_plain_list(sort_dict(work_diff)))

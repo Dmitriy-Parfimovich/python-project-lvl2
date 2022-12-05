@@ -3,37 +3,6 @@
 import copy
 import itertools
 
-# -------------------------------------------------------------------------
-def walk(a, b): # noqa
-    res = []
-    keysA = list(a.keys())
-    keysB = list(b.keys())
-    keys = list(set(keysA + keysB))
-    for elem in keys:
-        # -------------------------------------------------------
-        if elem in a and elem in b and a[elem] != b[elem]:
-            if type(a[elem]) is dict and type(b[elem]) is dict:
-                dict_type = {'type': '=', 'key': elem, 'value':
-                             walk(a[elem], b[elem])}
-                res.append(dict_type)
-            else:
-                dict_type = {'type': '-+', 'key': elem, 'old_value':
-                             a[elem], 'new_value': b[elem]}
-                res.append(dict_type)
-    # -------------------------------------------------------
-        if elem in a and elem in b and a[elem] == b[elem]:
-            dict_type = {'type': '=', 'key': elem, 'value': a[elem]}
-            res.append(dict_type)
-# -------------------------------------------------------
-        if elem not in b:
-            dict_type = {'type': '-', 'key': elem, 'value': a[elem]}
-            res.append(dict_type)
-# -------------------------------------------------------
-        if elem not in a:
-            dict_type = {'type': '+', 'key': elem, 'value': b[elem]}
-            res.append(dict_type)
-    return res
-
 
 # -------------------------------------------------------------------------
 def sort_dict(a):
@@ -99,7 +68,6 @@ def get_decoded_dict(value): # noqa
                 tree[item] = 'null'
     return tree
 
-
 # -------------------------------------------------------------------------
 def stringify(value, replacer=' ', spaces_count=1): # noqa
     def iter_(current_value, depth):
@@ -125,5 +93,5 @@ def stringify(value, replacer=' ', spaces_count=1): # noqa
 
 
 # ---------------------------------------------------------------------------
-def stylish(text1, text2):
-    return stringify(get_decoded_dict(sort_dict(walk(text1, text2))), ' ', 2)
+def stylish(work_diff):
+    return stringify(get_decoded_dict(sort_dict(work_diff)), ' ', 2)
