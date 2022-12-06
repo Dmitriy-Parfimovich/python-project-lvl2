@@ -5,6 +5,13 @@ import itertools
 from gendiff.modules.stylish import sort_dict
 
 
+# constants
+ADDED = 'added'
+REMOVED = 'removed'
+CHANGED = 'changed'
+NESTED = 'nested'
+
+
 def get_plain_list(tree): # noqa
     tree = copy.deepcopy(tree)
 
@@ -12,23 +19,23 @@ def get_plain_list(tree): # noqa
         for item in tree:
             for item1 in item:
                 children = item[item1]
-                if children == '=' and type(item['value']) is list:
+                if children == NESTED and type(item['value']) is list:
                     node += '.' + item['key']
                     walk(item['value'], node)
                     node = node[::-1]
                     node = node[node.find('.') + 1:]
                     node = node[::-1]
-                if children == '+':
+                if children == ADDED:
                     lines.append(f"{node}.{item['key']}")
                     if type(item['value']) is dict:
                         lines.append('[complex value]')
                     else:
                         lines.append(item['value'])
                     lines.append('added')
-                if children == '-':
+                if children == REMOVED:
                     lines.append(f"{node}.{item['key']}")
                     lines.append('removed')
-                if children == '-+':
+                if children == CHANGED:
                     lines.append(f"{node}.{item['key']}")
                     if type(item['old_value']) is dict:
                         lines.append('[complex value]')

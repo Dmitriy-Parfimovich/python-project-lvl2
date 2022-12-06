@@ -11,6 +11,11 @@ from gendiff.modules.json_output import get_json
 FORMAT_ONE = 'stylish'
 FORMAT_TWO = 'plain'
 FORMAT_THREE = 'json'
+ADDED = 'added'
+REMOVED = 'removed'
+CONSTANT = 'constant'
+CHANGED = 'changed'
+NESTED = 'nested'
 
 
 # -------------------------------------------------------------------------
@@ -23,24 +28,24 @@ def get_work_diff(a, b): # noqa
         # -------------------------------------------------------
         if elem in a and elem in b and a[elem] != b[elem]:
             if type(a[elem]) is dict and type(b[elem]) is dict:
-                dict_type = {'type': '=', 'key': elem, 'value':
+                dict_type = {'type': NESTED, 'key': elem, 'value':
                              get_work_diff(a[elem], b[elem])}
                 res.append(dict_type)
             else:
-                dict_type = {'type': '-+', 'key': elem, 'old_value':
+                dict_type = {'type': CHANGED, 'key': elem, 'old_value':
                              a[elem], 'new_value': b[elem]}
                 res.append(dict_type)
     # -------------------------------------------------------
         if elem in a and elem in b and a[elem] == b[elem]:
-            dict_type = {'type': '=', 'key': elem, 'value': a[elem]}
+            dict_type = {'type': CONSTANT, 'key': elem, 'value': a[elem]}
             res.append(dict_type)
     # -------------------------------------------------------
         if elem not in b:
-            dict_type = {'type': '-', 'key': elem, 'value': a[elem]}
+            dict_type = {'type': REMOVED, 'key': elem, 'value': a[elem]}
             res.append(dict_type)
     # -------------------------------------------------------
         if elem not in a:
-            dict_type = {'type': '+', 'key': elem, 'value': b[elem]}
+            dict_type = {'type': ADDED, 'key': elem, 'value': b[elem]}
             res.append(dict_type)
     return res
 

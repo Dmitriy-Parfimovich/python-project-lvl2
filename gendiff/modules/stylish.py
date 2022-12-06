@@ -4,6 +4,14 @@ import copy
 import itertools
 
 
+# constants
+ADDED = 'added'
+REMOVED = 'removed'
+CONSTANT = 'constant'
+CHANGED = 'changed'
+NESTED = 'nested'
+
+
 # -------------------------------------------------------------------------
 def sort_dict(a):
     for item in a:
@@ -33,13 +41,13 @@ def get_decoded_dict(value): # noqa
                     item[item1] = get_decoded_dict(item[item1])
                 if type(item[item1]) is dict:
                     item[item1] = get_decoded_dict(item[item1])
-                if item[item1] == '=':
+                if item[item1] == CONSTANT or item[item1] == NESTED:
                     item['  ' + item['key']] = item.pop('value')
-                if item[item1] == '-':
+                if item[item1] == REMOVED:
                     item['- ' + item['key']] = item.pop('value')
-                if item[item1] == '+':
+                if item[item1] == ADDED:
                     item['+ ' + item['key']] = item.pop('value')
-                if item[item1] == '-+':
+                if item[item1] == CHANGED:
                     item['- ' + item['key']] = item.pop('old_value')
                     item['+ ' + item['key']] = item.pop('new_value')
                 if item[item1] is True:
@@ -51,13 +59,13 @@ def get_decoded_dict(value): # noqa
             del item['type']
             del item['key']
         if type(item) is not dict:
-            if tree[item] == '=':
+            if tree[item] == CONSTANT or tree[item] == NESTED:
                 tree[tree['  ' + 'key']] = tree.pop('value')
-            if tree[item] == '-':
+            if tree[item] == REMOVED:
                 tree['- ' + tree['key']] = tree.pop('value')
-            if tree[item] == '+':
+            if tree[item] == ADDED:
                 tree['+ ' + tree['key']] = tree.pop('value')
-            if tree[item] == '-+':
+            if tree[item] == CHANGED:
                 tree['- ' + tree['key']] = tree.pop('old_value')
                 tree['+ ' + tree['key']] = tree.pop('new_value')
             if tree[item] is True:
