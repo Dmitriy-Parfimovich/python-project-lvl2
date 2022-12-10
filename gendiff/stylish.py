@@ -13,27 +13,21 @@ NESTED = 'nested'
 
 
 # -------------------------------------------------------------------------
-def sort_dict(a):
-    for item in a:
-        if 'value' in item and type(item['value']) is list and\
-           type(item['value'][0]) is dict:
-            item['value'] = sorted(sort_dict(item['value']),
-                                   key=lambda d: d['key'])
-        if 'old_value' in item and type(item['old_value']) is list and\
-           type(item['old_value'][0]) is dict:
-            item['old_value'] = sorted(sort_dict(item['old_value']),
-                                       key=lambda d: d['key'])
-        if 'new_value' in item and type(item['new_value']) is list and\
-           type(item['new_value'][0]) is dict:
-            item['new_value'] = sorted(sort_dict(item['new_value']),
-                                       key=lambda d: d['key'])
-    for item in a:
-        a = sorted(a, key=lambda d: d['key'])
-    return a
+def convert_to_str(value):
+    if value is True:
+        value = 'true'
+    if value is False:
+        value = 'false'
+    if value is None:
+        value = 'null'
+    return value
+
 
 # -------------------------------------------------------------------------
 def get_decoded_dict(value): # noqa
     tree = copy.deepcopy(value)
+    if type(tree) is list:
+        tree = sorted(tree, key=lambda d: d['key'])
     for item in tree:
         if type(item) is dict:
             for item1 in item:
@@ -50,12 +44,7 @@ def get_decoded_dict(value): # noqa
                 if item[item1] == CHANGED:
                     item['- ' + item['key']] = item.pop('old_value')
                     item['+ ' + item['key']] = item.pop('new_value')
-                if item[item1] is True:
-                    item[item1] = 'true'
-                if item[item1] is False:
-                    item[item1] = 'false'
-                if item[item1] is None:
-                    item[item1] = 'null'
+                item[item1] = convert_to_str(item[item1])
             del item['type']
             del item['key']
         if type(item) is not dict:
@@ -68,16 +57,12 @@ def get_decoded_dict(value): # noqa
             if tree[item] == CHANGED:
                 tree['- ' + tree['key']] = tree.pop('old_value')
                 tree['+ ' + tree['key']] = tree.pop('new_value')
-            if tree[item] is True:
-                tree[item] = 'true'
-            if tree[item] is False:
-                tree[item] = 'false'
-            if tree[item] is None:
-                tree[item] = 'null'
+            tree[item] = convert_to_str(tree[item])
     return tree
 
 # -------------------------------------------------------------------------
 def stringify(value, replacer=' ', spaces_count=1): # noqa
+
     def iter_(current_value, depth):
         deep_indent_size = depth + spaces_count
         deep_indent = replacer * deep_indent_size
@@ -102,4 +87,4 @@ def stringify(value, replacer=' ', spaces_count=1): # noqa
 
 # ---------------------------------------------------------------------------
 def stylish(work_diff):
-    return stringify(get_decoded_dict(sort_dict(work_diff)), ' ', 2)
+    return stringify(get_decoded_dict(work_diff), ' ', 2)

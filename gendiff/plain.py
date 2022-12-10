@@ -2,7 +2,7 @@
 
 import copy
 import itertools
-from gendiff.stylish import sort_dict
+from gendiff.stylish import convert_to_str
 
 
 # constants
@@ -13,10 +13,13 @@ NESTED = 'nested'
 COMPLEX = '[complex value]'
 
 
-def get_plain_list(tree): # noqa
+def get_plain_format(tree): # noqa
     tree = copy.deepcopy(tree)
 
-    def walk(tree, node='', lines=[]):
+    def walk(tree, node='', res_lines=[]):
+        lines = []
+        if type(tree) is list:
+            tree = sorted(tree, key=lambda d: d['key'])
         for item in tree:
             for item1 in item:
                 children = item[item1]
@@ -33,9 +36,21 @@ def get_plain_list(tree): # noqa
                     else:
                         lines.append(item['value'])
                     lines.append(ADDED)
+                    lines[1] = convert_to_str(lines[1])
+                    if lines[1] == COMPLEX or\
+                       lines[1] == 'true' or\
+                       lines[1] == 'false' or\
+                       lines[1] == 'null' or\
+                       type(lines[1]) is int:
+                        res_lines.append(f"Property '{lines[0][1:]}' was added with value: {lines[1]}") # noqa
+                    else:
+                        res_lines.append(f"Property '{lines[0][1:]}' was added with value: '{lines[1]}'") # noqa
+                    lines = []
                 if children == REMOVED:
                     lines.append(f"{node}.{item['key']}")
                     lines.append(REMOVED)
+                    res_lines.append(f"Property '{lines[0][1:]}' was removed")
+                    lines = []
                 if children == CHANGED:
                     lines.append(f"{node}.{item['key']}")
                     if type(item['old_value']) is dict:
@@ -48,61 +63,31 @@ def get_plain_list(tree): # noqa
                         lines.append(item['old_value'])
                         lines.append(item['new_value'])
                     lines.append(CHANGED)
-        return lines
+                    lines[1] = convert_to_str(lines[1])
+                    lines[2] = convert_to_str(lines[2])
+                    if (lines[1] == 'true' or lines[1] == 'false'
+                        or lines[1] == 'null'
+                        or lines[1] == COMPLEX or type(lines[1]) is int)\
+                        and (lines[2] == 'true' or lines[2] == 'false'
+                             or lines[2] == 'null' or lines[2] == COMPLEX
+                             or type(lines[2]) is int):
+                        res_lines.append(f"Property '{lines[0][1:]}' was updated. From {lines[1]} to {lines[2]}") # noqa
+                    elif (lines[1] == 'true' or lines[1] == 'false'
+                          or lines[1] == 'null'
+                          or lines[1] == COMPLEX or type(lines[1]) is int):
+                        res_lines.append(f"Property '{lines[0][1:]}' was updated. From {lines[1]} to '{lines[2]}'") # noqa
+                    elif (lines[2] == 'true' or lines[2] == 'false'
+                          or lines[2] == 'null' or lines[2] == COMPLEX
+                          or type(lines[2]) is int):
+                        res_lines.append(f"Property '{lines[0][1:]}' was updated. From '{lines[1]}' to {lines[2]}") # noqa
+                    else:
+                        res_lines.append(f"Property '{lines[0][1:]}' was updated. From '{lines[1]}' to '{lines[2]}'") # noqa
+                    lines = []
+        result = itertools.chain(res_lines)
+        return '\n'.join(result)
     return walk(tree)
-
-
-def convert_to_str(value):
-    if value is True:
-        value = 'true'
-    if value is False:
-        value = 'false'
-    if value is None:
-        value = 'null'
-    return value
-
-
-def get_plain_format(lines): # noqa
-    res_lines = []
-    for elem in lines:
-        if elem == ADDED:
-            lines[1] = convert_to_str(lines[1])
-            if lines[1] == COMPLEX or\
-               lines[1] == 'true' or\
-               lines[1] == 'false' or\
-               lines[1] == 'null' or\
-               type(lines[1]) is int:
-                res_lines.append(f"Property '{lines[0][1:]}' was added with value: {lines[1]}") # noqa
-            else:
-                res_lines.append(f"Property '{lines[0][1:]}' was added with value: '{lines[1]}'") # noqa
-            lines = lines[3:]
-        if elem == REMOVED:
-            res_lines.append(f"Property '{lines[0][1:]}' was removed")
-            lines = lines[2:]
-        if elem == CHANGED:
-            lines[1] = convert_to_str(lines[1])
-            lines[2] = convert_to_str(lines[2])
-            if (lines[1] == 'true' or lines[1] == 'false' or lines[1] == 'null'
-                or lines[1] == COMPLEX or type(lines[1]) is int)\
-                and (lines[2] == 'true' or lines[2] == 'false'
-                     or lines[2] == 'null' or lines[2] == COMPLEX
-                     or type(lines[2]) is int):
-                res_lines.append(f"Property '{lines[0][1:]}' was updated. From {lines[1]} to {lines[2]}") # noqa
-            elif (lines[1] == 'true' or lines[1] == 'false'
-                  or lines[1] == 'null'
-                  or lines[1] == COMPLEX or type(lines[1]) is int):
-                res_lines.append(f"Property '{lines[0][1:]}' was updated. From {lines[1]} to '{lines[2]}'") # noqa
-            elif (lines[2] == 'true' or lines[2] == 'false'
-                  or lines[2] == 'null' or lines[2] == COMPLEX
-                  or type(lines[2]) is int):
-                res_lines.append(f"Property '{lines[0][1:]}' was updated. From '{lines[1]}' to {lines[2]}") # noqa
-            else:
-                res_lines.append(f"Property '{lines[0][1:]}' was updated. From '{lines[1]}' to '{lines[2]}'") # noqa
-            lines = lines[4:]
-    result = itertools.chain(res_lines)
-    return '\n'.join(result)
 
 
 # ---------------------------------------------------------------------------
 def plain(work_diff):
-    return get_plain_format(get_plain_list(sort_dict(work_diff)))
+    return get_plain_format(work_diff)
