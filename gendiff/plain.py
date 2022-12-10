@@ -2,7 +2,7 @@
 
 import copy
 import itertools
-from gendiff.modules.stylish import sort_dict
+from gendiff.stylish import sort_dict
 
 
 # constants

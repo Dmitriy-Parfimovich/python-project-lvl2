@@ -2,15 +2,9 @@
 
 import json
 import yaml
-from gendiff.modules.stylish import stylish
-from gendiff.modules.plain import plain
-from gendiff.modules.json_output import get_json
 
 
 # constants
-FORMAT_ONE = 'stylish'
-FORMAT_TWO = 'plain'
-FORMAT_THREE = 'json'
 ADDED = 'added'
 REMOVED = 'removed'
 CONSTANT = 'constant'
@@ -65,17 +59,10 @@ def get_dict_from_text(text, extension):
     return text_dict
 
 
-def generate_diff(file_path1, file_path2, format='stylish'):
+def generate_work_diff(file_path1, file_path2):
     text1, extension1 = read_file(file_path1)
     text2, extension2 = read_file(file_path2)
     text_dict1 = get_dict_from_text(text1, extension1)
     text_dict2 = get_dict_from_text(text2, extension2)
     work_diff = get_work_diff(text_dict1, text_dict2)
-    if format == FORMAT_ONE:
-        return stylish(work_diff)
-    if format == FORMAT_TWO:
-        return plain(work_diff)
-    if format == FORMAT_THREE:
-        return get_json(work_diff)
-    else:
-        raise ValueError('Please, enter the correct format.')
+    return work_diff
