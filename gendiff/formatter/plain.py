@@ -2,14 +2,11 @@
 
 import copy
 import itertools
-from gendiff.stylish import convert_to_str
+from gendiff.formatter.stylish import convert_to_str
+from gendiff.generate_work_diff import ADDED, REMOVED, CHANGED, NESTED
 
 
 # constants
-ADDED = 'added'
-REMOVED = 'removed'
-CHANGED = 'changed'
-NESTED = 'nested'
 COMPLEX = '[complex value]'
 
 
